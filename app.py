@@ -59,6 +59,18 @@ def obtener_hora_ecuador():
 
 # --- INTERFAZ PRINCIPAL ---
 def main():
+    
+    # 🔥 TRUCO CSS PARA OCULTAR GITHUB Y MENÚS 🔥
+    hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;} /* Oculta el menú de 3 rayas */
+            footer {visibility: hidden;}    /* Oculta 'Made with Streamlit' */
+            header {visibility: hidden;}    /* Oculta la barra de colores superior */
+            .stDeployButton {display:none;} /* Oculta el botón Deploy */
+            </style>
+            """
+    st.markdown(hide_st_style, unsafe_allow_html=True)
+
     # 🎨 CABECERA YACHAY TECH
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; font-weight: bold;'>YACHAY TECH</h2>", unsafe_allow_html=True)
@@ -81,7 +93,7 @@ def main():
     if 'cedula_previa' not in st.session_state:
         st.session_state.cedula_previa = ""
 
-    # --- PANTALLA PRINCIPAL (SI NO HAY FORMULARIO ACTIVO) ---
+    # --- PANTALLA PRINCIPAL ---
     if not st.session_state.formulario_activo:
         
         # 1. Input de Cédula
@@ -92,12 +104,12 @@ def main():
                                          placeholder="Ej: 1712345678")
             boton_ingreso = st.button("Ingresar 🚀", use_container_width=True, type="primary")
 
-        # 2. Lógica de Ingreso (Check-in)
+        # 2. Lógica de Ingreso
         if boton_ingreso:
             if not cedula_input:
                 st.toast("⚠️ Por favor escribe un número.")
             else:
-                st.session_state.cedula_previa = cedula_input # Guardamos para el form
+                st.session_state.cedula_previa = cedula_input 
                 with st.spinner("🔄 Verificando..."):
                     try:
                         data = ws_usuarios.get_all_records()
@@ -113,7 +125,7 @@ def main():
 
                         fecha, hora = obtener_hora_ecuador()
 
-                        # --- CASO: YA EXISTE (ENTRADA EXITOSA) ---
+                        # --- CASO: YA EXISTE ---
                         if usuario_encontrado is not None:
                             nombre = str(usuario_encontrado['Nombre'])
                             ws_visitas.append_row([
@@ -129,28 +141,27 @@ def main():
                             time.sleep(3)
                             st.rerun()
 
-                        # --- CASO: NO EXISTE (MANDAR A REGISTRO) ---
+                        # --- CASO: NO EXISTE ---
                         else:
                             st.session_state.formulario_activo = True
-                            st.session_state.modo_edicion = False # Es nuevo
+                            st.session_state.modo_edicion = False
                             st.rerun()
 
                     except Exception as e:
                         st.error(f"Error: {e}")
 
-        # 3. OPCIÓN DE RECTIFICAR (SIEMPRE VISIBLE ABAJO)
-        st.markdown("<br><br>", unsafe_allow_html=True) # Espacio
+        # 3. OPCIÓN DE RECTIFICAR
+        st.markdown("<br><br>", unsafe_allow_html=True)
         with st.expander("🛠️ ¿Necesitas corregir tus datos?", expanded=False):
             st.caption("Usa esta opción si cambiaste de semestre, carrera o escribiste mal tu nombre.")
             if st.button("Ir al formulario de actualización"):
                 st.session_state.modo_edicion = True
                 st.session_state.formulario_activo = True
-                # Si escribió algo en el input principal, lo usamos
                 if cedula_input:
                     st.session_state.cedula_previa = cedula_input
                 st.rerun()
 
-    # --- PANTALLA DE FORMULARIO (NUEVO O EDICIÓN) ---
+    # --- PANTALLA DE FORMULARIO ---
     else:
         titulo = "📝 Actualizar Datos" if st.session_state.modo_edicion else "📝 Registro Nuevo"
         st.markdown(f"### {titulo}")
@@ -159,11 +170,9 @@ def main():
             st.info("ℹ️ Al guardar, se sobrescribirá tu información en la base de datos.")
 
         with st.form("form_datos"):
-            # Si venimos de rectificar sin haber puesto cédula, permitimos escribirla
             cedula_default = st.session_state.cedula_previa
             disabled_cedula = True if (st.session_state.cedula_previa and not st.session_state.modo_edicion) else False
             
-            # Si está en modo edición y no hay cédula, debe poder escribirla
             if st.session_state.modo_edicion and not cedula_default:
                 disabled_cedula = False
 
@@ -180,15 +189,12 @@ def main():
             texto_btn = "Actualizar" if st.session_state.modo_edicion else "Registrarme"
             guardar = st.form_submit_button(texto_btn)
             
-            # Botón cancelar (fuera del form visualmente o lógica de escape)
-            
         if st.button("Cancelar / Volver"):
             st.session_state.formulario_activo = False
             st.session_state.modo_edicion = False
             st.rerun()
 
         if guardar:
-            # Usamos el valor del input, sea que estuviera deshabilitado o no
             cedula_final = val_cedula
             
             if "@" not in nuevo_correo:
@@ -199,9 +205,7 @@ def main():
                 try:
                     fecha, hora = obtener_hora_ecuador()
                     
-                    # --- LÓGICA DE ACTUALIZACIÓN ---
                     if st.session_state.modo_edicion:
-                        # Buscar si existe para sobrescribir
                         try:
                             cell = ws_usuarios.find(str(cedula_final))
                             fila = cell.row
@@ -210,18 +214,15 @@ def main():
                             ]])
                             st.success("✅ ¡Datos actualizados correctamente!")
                         except gspread.exceptions.CellNotFound:
-                            # Si intentó editar pero no existía, lo creamos como nuevo
                             ws_usuarios.append_row([
                                 str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                             ])
-                            st.success("✅ Usuario no existía, se ha creado uno nuevo.")
+                            st.success("✅ Usuario creado.")
 
-                    # --- LÓGICA DE NUEVO REGISTRO ---
                     else:
                         ws_usuarios.append_row([
                             str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                         ])
-                        # Registrar visita también
                         ws_visitas.append_row([
                             fecha, hora, str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                         ])
@@ -241,7 +242,7 @@ def main():
 
     # --- FOOTER ---
     st.markdown("---")
-    st.markdown("<div style='text-align: center; color: black ; font-size: 13px;'>By: Roger Zambrano</div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; color: grey; font-size: 12px;'>By: Roger Zambrano</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
