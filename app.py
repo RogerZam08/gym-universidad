@@ -61,32 +61,47 @@ def obtener_hora_ecuador():
 def main():
     
     # 🔥 CSS NUCLEAR PARA MÓVIL (Con !important) 🔥
+       # 🔥 CSS NUCLEAR V2 (BOMBA ATÓMICA) 🔥
     hide_st_style = """
             <style>
-            /* Ocultar menú de hamburguesa */
-            #MainMenu {visibility: hidden !important; display: none !important;}
+            /* 1. Ocultar la barra superior completa */
+            header {visibility: hidden !important;}
             
-            /* Ocultar pie de página "Made with Streamlit" */
-            footer {visibility: hidden !important; display: none !important;}
+            /* 2. Ocultar menú y footer específicos */
+            #MainMenu {visibility: hidden !important;}
+            footer {visibility: hidden !important;}
             
-            /* Ocultar barra superior de colores */
-            header {visibility: hidden !important; display: none !important;}
+            /* 3. Ocultar la Toolbar (donde sale la foto) por ID específico */
+            [data-testid="stToolbar"] {
+                visibility: hidden !important;
+                display: none !important;
+                height: 0px !important;
+            }
             
-            /* Ocultar la barra de herramientas donde sale la foto (Toolbar) */
-            div[data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+            /* 4. Ocultar la decoración de colores arriba */
+            [data-testid="stDecoration"] {
+                visibility: hidden !important;
+                display: none !important;
+                height: 0px !important;
+            }
+
+            /* 5. Ocultar el contenedor del Header */
+            [data-testid="stHeader"] {
+                visibility: hidden !important;
+                display: none !important;
+                background-color: transparent !important;
+            }
+
+            /* 6. Mover el contenido hacia arriba para tapar huecos */
+            .block-container {
+                padding-top: 1rem !important; /* Reduce el espacio vacío arriba */
+            }
             
-            /* Ocultar decoración extra */
-            div[data-testid="stDecoration"] {visibility: hidden !important; display: none !important;}
-            
-            /* Ocultar botón de Deploy si aparece */
+            /* 7. Eliminar botones de Deploy */
             .stDeployButton {display:none !important;}
-            
-            /* Ocultar badge de visor (foto de perfil flotante) */
-            viewer-badge-container {display: none !important;}
             </style>
             """
     st.markdown(hide_st_style, unsafe_allow_html=True)
-
     # 🎨 CABECERA YACHAY TECH
     st.markdown("<br>", unsafe_allow_html=True) 
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
