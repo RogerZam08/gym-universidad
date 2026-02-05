@@ -134,7 +134,7 @@ def main():
             cedula_input = st.text_input("Ingresa tu número de Cédula", 
                                          max_chars=10, 
                                          placeholder="Ej: 1712345678")
-            boton_ingreso = st.button("Ingresar 🚀", use_container_width=True, type="primary")
+            boton_ingreso = st.button("Ingresar ", use_container_width=True, type="primary")
 
         # 2. Lógica de Ingreso
         if boton_ingreso:
