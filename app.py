@@ -60,23 +60,35 @@ def obtener_hora_ecuador():
 # --- INTERFAZ PRINCIPAL ---
 def main():
     
-    # 🔥 CSS SUPER AGRESIVO PARA MÓVIL 🔥
-    # Esto oculta la barra superior donde sale tu foto de GitHub
+    # 🔥 CSS NUCLEAR PARA MÓVIL (Con !important) 🔥
     hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;} 
-            footer {visibility: hidden;} 
-            header {visibility: hidden;} 
-            [data-testid="stToolbar"] {visibility: hidden; display: none;} /* Oculta la foto de perfil */
-            [data-testid="stHeader"] {visibility: hidden; display: none;} /* Oculta la barra de colores */
-            [data-testid="stDecoration"] {visibility: hidden; display: none;}
-            .stDeployButton {display:none;}
+            /* Ocultar menú de hamburguesa */
+            #MainMenu {visibility: hidden !important; display: none !important;}
+            
+            /* Ocultar pie de página "Made with Streamlit" */
+            footer {visibility: hidden !important; display: none !important;}
+            
+            /* Ocultar barra superior de colores */
+            header {visibility: hidden !important; display: none !important;}
+            
+            /* Ocultar la barra de herramientas donde sale la foto (Toolbar) */
+            div[data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+            
+            /* Ocultar decoración extra */
+            div[data-testid="stDecoration"] {visibility: hidden !important; display: none !important;}
+            
+            /* Ocultar botón de Deploy si aparece */
+            .stDeployButton {display:none !important;}
+            
+            /* Ocultar badge de visor (foto de perfil flotante) */
+            viewer-badge-container {display: none !important;}
             </style>
             """
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
-    # 🎨 CABECERA YACHAY TECH (Ajustada para que no quede pegada al techo)
-    st.markdown("<br>", unsafe_allow_html=True) # Un pequeño espacio arriba
+    # 🎨 CABECERA YACHAY TECH
+    st.markdown("<br>", unsafe_allow_html=True) 
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; font-weight: bold;'>YACHAY TECH</h2>", unsafe_allow_html=True)
     st.divider()
@@ -143,7 +155,8 @@ def main():
                             ])
                             st.success(f"¡Bienvenido, **{nombre}**! ✅")
                             st.info(f"🕒 Hora: {hora}")
-                            time.sleep(3)
+                            # TIEMPO AUMENTADO A 5 SEGUNDOS
+                            time.sleep(5)
                             st.rerun()
 
                         # --- CASO: NO EXISTE ---
@@ -234,7 +247,8 @@ def main():
                         st.balloons()
                         st.success("✅ ¡Registro completado!")
 
-                    time.sleep(2)
+                    # TIEMPO AUMENTADO A 5 SEGUNDOS
+                    time.sleep(5)
                     st.session_state.formulario_activo = False
                     st.session_state.modo_edicion = False
                     st.session_state.cedula_previa = ""
