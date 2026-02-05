@@ -60,18 +60,23 @@ def obtener_hora_ecuador():
 # --- INTERFAZ PRINCIPAL ---
 def main():
     
-    # 🔥 TRUCO CSS PARA OCULTAR GITHUB Y MENÚS 🔥
+    # 🔥 CSS SUPER AGRESIVO PARA MÓVIL 🔥
+    # Esto oculta la barra superior donde sale tu foto de GitHub
     hide_st_style = """
             <style>
-            #MainMenu {visibility: hidden;} /* Oculta el menú de 3 rayas */
-            footer {visibility: hidden;}    /* Oculta 'Made with Streamlit' */
-            header {visibility: hidden;}    /* Oculta la barra de colores superior */
-            .stDeployButton {display:none;} /* Oculta el botón Deploy */
+            #MainMenu {visibility: hidden;} 
+            footer {visibility: hidden;} 
+            header {visibility: hidden;} 
+            [data-testid="stToolbar"] {visibility: hidden; display: none;} /* Oculta la foto de perfil */
+            [data-testid="stHeader"] {visibility: hidden; display: none;} /* Oculta la barra de colores */
+            [data-testid="stDecoration"] {visibility: hidden; display: none;}
+            .stDeployButton {display:none;}
             </style>
             """
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
-    # 🎨 CABECERA YACHAY TECH
+    # 🎨 CABECERA YACHAY TECH (Ajustada para que no quede pegada al techo)
+    st.markdown("<br>", unsafe_allow_html=True) # Un pequeño espacio arriba
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; font-weight: bold;'>YACHAY TECH</h2>", unsafe_allow_html=True)
     st.divider()
@@ -242,7 +247,7 @@ def main():
 
     # --- FOOTER ---
     st.markdown("---")
-    st.markdown("<div style='text-align: center; color: black ; font-size: 13px;'>By: Roger Zambrano</div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; color: grey; font-size: 12px;'>By: Roger Zambrano</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
