@@ -1,0 +1,9 @@
+# Archivos de seguridad (NUNCA SUBIR)
+credenciales.json
+.streamlit/secrets.toml
+
+# Archivos basura de Python
+__pycache__/
+*.pyc
+venv/
+.env
