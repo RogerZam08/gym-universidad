@@ -62,37 +62,23 @@ def obtener_hora_ecuador():
 def main():
     
     # 🔥 CSS NIVEL DIOS PARA MÓVIL 🔥
-    # Oculta header, footer, toolbar y elimina los espacios vacíos
     st.markdown("""
         <style>
-            /* Ocultar toda la cabecera de Streamlit */
-            header[data-testid="stHeader"] {
-                display: none !important;
-                visibility: hidden !important;
-            }
-            
-            /* Ocultar la barra de herramientas (donde sale la foto) */
-            .stApp > header {
-                display: none !important;
-                visibility: hidden !important;
-            }
-            
-            /* Ocultar el menú hamburguesa y footer */
+            /* Ocultar elementos de Streamlit */
+            header[data-testid="stHeader"] {display: none !important;}
+            .stApp > header {display: none !important;}
             #MainMenu {visibility: hidden !important;}
             footer {visibility: hidden !important;}
-            
-            /* Ocultar botón de deploy */
             .stDeployButton {display:none !important;}
 
-            /* ELIMINAR EL ESPACIO VACÍO SUPERIOR */
-            /* Esto sube todo el contenido para que no quede un hueco blanco arriba */
+            /* Ajuste de espacios */
             .block-container {
-                padding-top: 0rem !important;
+                padding-top: 1rem !important;
                 padding-bottom: 0rem !important;
-                margin-top: -60px !important; 
+                margin-top: -50px !important; 
             }
             
-            /* Forzar fondo blanco limpio en móvil */
+            /* Forzar fondo blanco limpio */
             [data-testid="stAppViewContainer"] {
                 background-color: white;
             }
@@ -100,7 +86,7 @@ def main():
         """, unsafe_allow_html=True)
 
     # 🎨 CABECERA YACHAY TECH
-    st.markdown("<br><br>", unsafe_allow_html=True) # Espacio para compensar la subida
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; font-weight: bold;'>YACHAY TECH</h2>", unsafe_allow_html=True)
     st.divider()
@@ -130,7 +116,7 @@ def main():
             cedula_input = st.text_input("Ingresa tu número de Cédula", 
                                          max_chars=10, 
                                          placeholder="Ej: 1712345678")
-            boton_ingreso = st.button("Ingresar ", use_container_width=True, type="primary")
+            boton_ingreso = st.button("Ingresar 🚀", use_container_width=True, type="primary")
 
         if boton_ingreso:
             if not cedula_input:
@@ -162,6 +148,8 @@ def main():
                                 str(usuario_encontrado['Correo']),
                                 str(usuario_encontrado['Sexo'])
                             ])
+                            # NOTIFICACIÓN ELEGANTE (TOAST)
+                            st.toast(f"¡Bienvenido, {nombre}!", icon="✅")
                             st.success(f"¡Bienvenido, **{nombre}**! ✅")
                             st.info(f"🕒 Hora: {hora}")
                             time.sleep(5)
@@ -236,11 +224,13 @@ def main():
                             ws_usuarios.update(f"A{fila}:F{fila}", [[
                                 str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                             ]])
-                            st.success("✅ ¡Datos actualizados correctamente!")
+                            st.toast("Datos actualizados correctamente", icon="🔄")
+                            st.success("✅ ¡Datos actualizados!")
                         except gspread.exceptions.CellNotFound:
                             ws_usuarios.append_row([
                                 str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                             ])
+                            st.toast("Usuario Creado", icon="✨")
                             st.success("✅ Usuario creado.")
 
                     else:
@@ -250,7 +240,8 @@ def main():
                         ws_visitas.append_row([
                             fecha, hora, str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                         ])
-                        st.balloons()
+                        # NOTIFICACIÓN ELEGANTE SIN GLOBOS
+                        st.toast("¡Registro completado!", icon="🎉")
                         st.success("✅ ¡Registro completado!")
 
                     time.sleep(5)
