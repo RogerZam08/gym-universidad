@@ -12,7 +12,8 @@ import os
 st.set_page_config(
     page_title="Registro Gym Yachay",
     page_icon="💪",
-    layout="centered"
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
 # --- ID DE TU HOJA DE CÁLCULO ---
@@ -60,50 +61,46 @@ def obtener_hora_ecuador():
 # --- INTERFAZ PRINCIPAL ---
 def main():
     
-    # 🔥 CSS NUCLEAR PARA MÓVIL (Con !important) 🔥
-       # 🔥 CSS NUCLEAR V2 (BOMBA ATÓMICA) 🔥
-    hide_st_style = """
-            <style>
-            /* 1. Ocultar la barra superior completa */
-            header {visibility: hidden !important;}
+    # 🔥 CSS NIVEL DIOS PARA MÓVIL 🔥
+    # Oculta header, footer, toolbar y elimina los espacios vacíos
+    st.markdown("""
+        <style>
+            /* Ocultar toda la cabecera de Streamlit */
+            header[data-testid="stHeader"] {
+                display: none !important;
+                visibility: hidden !important;
+            }
             
-            /* 2. Ocultar menú y footer específicos */
+            /* Ocultar la barra de herramientas (donde sale la foto) */
+            .stApp > header {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            
+            /* Ocultar el menú hamburguesa y footer */
             #MainMenu {visibility: hidden !important;}
             footer {visibility: hidden !important;}
             
-            /* 3. Ocultar la Toolbar (donde sale la foto) por ID específico */
-            [data-testid="stToolbar"] {
-                visibility: hidden !important;
-                display: none !important;
-                height: 0px !important;
-            }
-            
-            /* 4. Ocultar la decoración de colores arriba */
-            [data-testid="stDecoration"] {
-                visibility: hidden !important;
-                display: none !important;
-                height: 0px !important;
-            }
-
-            /* 5. Ocultar el contenedor del Header */
-            [data-testid="stHeader"] {
-                visibility: hidden !important;
-                display: none !important;
-                background-color: transparent !important;
-            }
-
-            /* 6. Mover el contenido hacia arriba para tapar huecos */
-            .block-container {
-                padding-top: 1rem !important; /* Reduce el espacio vacío arriba */
-            }
-            
-            /* 7. Eliminar botones de Deploy */
+            /* Ocultar botón de deploy */
             .stDeployButton {display:none !important;}
-            </style>
-            """
-    st.markdown(hide_st_style, unsafe_allow_html=True)
+
+            /* ELIMINAR EL ESPACIO VACÍO SUPERIOR */
+            /* Esto sube todo el contenido para que no quede un hueco blanco arriba */
+            .block-container {
+                padding-top: 0rem !important;
+                padding-bottom: 0rem !important;
+                margin-top: -60px !important; 
+            }
+            
+            /* Forzar fondo blanco limpio en móvil */
+            [data-testid="stAppViewContainer"] {
+                background-color: white;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+
     # 🎨 CABECERA YACHAY TECH
-    st.markdown("<br>", unsafe_allow_html=True) 
+    st.markdown("<br><br>", unsafe_allow_html=True) # Espacio para compensar la subida
     st.markdown("<h1 style='text-align: center; color: #005eb8;'>Registro Gym</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; font-weight: bold;'>YACHAY TECH</h2>", unsafe_allow_html=True)
     st.divider()
@@ -128,15 +125,13 @@ def main():
     # --- PANTALLA PRINCIPAL ---
     if not st.session_state.formulario_activo:
         
-        # 1. Input de Cédula
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             cedula_input = st.text_input("Ingresa tu número de Cédula", 
                                          max_chars=10, 
                                          placeholder="Ej: 1712345678")
-            boton_ingreso = st.button("Ingresar ", use_container_width=True, type="primary")
+            boton_ingreso = st.button("Ingresar 🚀", use_container_width=True, type="primary")
 
-        # 2. Lógica de Ingreso
         if boton_ingreso:
             if not cedula_input:
                 st.toast("⚠️ Por favor escribe un número.")
@@ -157,7 +152,6 @@ def main():
 
                         fecha, hora = obtener_hora_ecuador()
 
-                        # --- CASO: YA EXISTE ---
                         if usuario_encontrado is not None:
                             nombre = str(usuario_encontrado['Nombre'])
                             ws_visitas.append_row([
@@ -170,11 +164,9 @@ def main():
                             ])
                             st.success(f"¡Bienvenido, **{nombre}**! ✅")
                             st.info(f"🕒 Hora: {hora}")
-                            # TIEMPO AUMENTADO A 5 SEGUNDOS
                             time.sleep(5)
                             st.rerun()
 
-                        # --- CASO: NO EXISTE ---
                         else:
                             st.session_state.formulario_activo = True
                             st.session_state.modo_edicion = False
@@ -183,7 +175,6 @@ def main():
                     except Exception as e:
                         st.error(f"Error: {e}")
 
-        # 3. OPCIÓN DE RECTIFICAR
         st.markdown("<br><br>", unsafe_allow_html=True)
         with st.expander("🛠️ ¿Necesitas corregir tus datos?", expanded=False):
             st.caption("Usa esta opción si cambiaste de semestre, carrera o escribiste mal tu nombre.")
@@ -262,7 +253,6 @@ def main():
                         st.balloons()
                         st.success("✅ ¡Registro completado!")
 
-                    # TIEMPO AUMENTADO A 5 SEGUNDOS
                     time.sleep(5)
                     st.session_state.formulario_activo = False
                     st.session_state.modo_edicion = False
