@@ -116,7 +116,8 @@ def main():
             cedula_input = st.text_input("Ingresa tu número de Cédula", 
                                          max_chars=10, 
                                          placeholder="Ej: 1712345678")
-            boton_ingreso = st.button("Ingresar 🚀", use_container_width=True, type="primary")
+            # BOTÓN SIN EMOJI
+            boton_ingreso = st.button("Ingresar", use_container_width=True, type="primary")
 
         if boton_ingreso:
             if not cedula_input:
@@ -240,7 +241,6 @@ def main():
                         ws_visitas.append_row([
                             fecha, hora, str(cedula_final), nuevo_nombre, nuevo_carrera, str(nuevo_semestre), nuevo_correo, nuevo_sexo
                         ])
-                        # NOTIFICACIÓN ELEGANTE SIN GLOBOS
                         st.toast("¡Registro completado!", icon="🎉")
                         st.success("✅ ¡Registro completado!")
 
